@@ -1,0 +1,1 @@
+# I want a program that is able to just take in a image input and output the values of the lawn such as %dryness
