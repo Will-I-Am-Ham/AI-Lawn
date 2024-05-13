@@ -1,1 +1,0 @@
-#bascially all the communication to the physical world such as powering the thingy

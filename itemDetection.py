@@ -1,1 +1,0 @@
-# I want this to be able to detect thigs like weeds or patches of dry grass and output the x and y loc of those items
