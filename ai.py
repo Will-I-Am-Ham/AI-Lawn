@@ -1,32 +1,29 @@
-# TensorFlow and tf.keras
-import tensorflow as tf
-
-# Helper libraries
+import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
+from tensorflow.python.keras.layers import Dense
+from tensorflow.keras import datasets, models
 
-print(tf.__version__)
+def analyis():
+  (training_images, training_labels), (testing_images, testing_labels) = datasets.cifar10.load_data()
+  training_images, testing_images = training_images/255, testing_images/255
 
-fashion_mnist = tf.keras.datasets.fashion_mnist
-
-(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
-
-class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
-               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
-
-print(train_images.shape)
+  class_names = ['siltsoil','claysoil','sandysoil','loamysoil','rockysoil','drysoil','packedsoil']
 
 
-train_images = train_images / 255.0
+  training_images = training_images[:20000]
+  training_labels = training_labels[:20000]
+  testing_images = testing_images[:4000]
+  testing_labels = testing_labels[:4000]
 
-test_images = test_images / 255.0
+  model = models.load_model('image_classifier.model')
 
-plt.figure(figsize=(10,10))
-for i in range(25):
-    plt.subplot(5,5,i+1)
-    plt.xticks([])
-    plt.yticks([])
-    plt.grid(False)
-    plt.imshow(train_images[i], cmap=plt.cm.binary)
-    plt.xlabel(class_names[train_labels[i]])
-plt.show()
+  img = cv.imread('soilreal.png')
+  img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+
+  plt.imshow(img, cmap=plt.cm.binary)
+
+  prediction = model.predict(np.array([img]) / 255)
+  index = np.argmax(prediction)
+  print("Prediction is: {class_names[index]}")
+  return class_names[index]

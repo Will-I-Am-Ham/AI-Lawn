@@ -1,7 +1,13 @@
 import tkinter as tk
+import os
+import shutil
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import random
+import pathlib
+
+import ai
+
 
 import time
 
@@ -124,6 +130,8 @@ class AI_Lawns_GUI:
         log = log + suggestion
 
         if file_path:
+
+
             
             image = Image.open(file_path)
             image.thumbnail((300, 300))  # Resize image to fit in label
@@ -131,14 +139,20 @@ class AI_Lawns_GUI:
             self.image_label.config(image=photo)
             self.image_label.image = photo  # Keep reference to avoid garbage collection
             
+            os.replace(file_path, str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
+            print( str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
+
+            ######################make the thing acutally work plz
+            #output = ai.analyis()
+
             # Open another window
             self.new_window = tk.Toplevel(self.master)
             self.new_window.title("Analysis")
-            self.new_window.geometry("1000x500")
+            self.new_window.geometry("1000x700")
 
-            c = 0
-            while (c < 100000000):
-                c += 1
+            # c = 0
+            # while (c < 100000000):
+            #     c += 1
             
             image = Image.open("3717050461_6eaaf8a077.jpg")
             image.thumbnail((200, 200))
