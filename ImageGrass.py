@@ -130,7 +130,7 @@ model.compile(optimizer=Adam(learning_rate=0.001, weight_decay = 0.000001), loss
 
 model.summary()
 
-epochs = 1
+epochs = 400
 
 #####Dont Change this##############################################
 STEP_SIZE_TRAIN=int(train_generator.n/train_generator.batch_size)
