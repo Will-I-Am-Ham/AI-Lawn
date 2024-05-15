@@ -15,16 +15,19 @@ import statistics as st
 from tensorflow.keras import layers
 
 
-
+###############CHANGE THIS############
+path_to_GrassDataSet = "C:\\Users\\meow1\\Documents\\CodingProjects\\GrassDataSet"
+######################################
 
 from warnings import simplefilter
 simplefilter(action='ignore', category=FutureWarning)
 
-data_dir = pathlib.Path("GrassDataSet\\biomass_data\\train")
+data_dir = pathlib.Path(path_to_GrassDataSet + "\\biomass_data\\train")
 
-df = pd.read_csv("GrassDataSet\\biomass_data\\train\\biomass_train_data.csv")
 
-testdf=pd.read_csv("GrassDataSet\\biomass_data\\test\\biomass_test_data.csv")
+df = pd.read_csv(path_to_GrassDataSet + "\\biomass_data\\train\\biomass_train_data.csv")
+
+testdf=pd.read_csv(path_to_GrassDataSet + "\\biomass_data\\test\\biomass_test_data.csv")
 
 
 # df["labels"] = df[["fresh_grass", "dry_grass","fresh_white_clover","dry_white_clover","fresh_red_clover",
@@ -48,7 +51,7 @@ train_datagen = ImageDataGenerator(rescale=1./255.,validation_split=0.4)
 
 train_generator=train_datagen.flow_from_dataframe(
                 dataframe=df,
-                directory="GrassDataSet\\biomass_data\\train\\images",
+                directory=path_to_GrassDataSet + "\\biomass_data\\train\\images",
                 x_col="image",
                 y_col="labels",
                 subset="training",
@@ -60,7 +63,7 @@ train_generator=train_datagen.flow_from_dataframe(
 
 valid_generator=train_datagen.flow_from_dataframe(
                 dataframe=df,
-                directory="GrassDataSet\\biomass_data\\train\\images",
+                directory=path_to_GrassDataSet + "\\biomass_data\\train\\images",
                 x_col="image",
                 y_col="labels",
                 subset="validation",
@@ -74,7 +77,7 @@ test_datagen=ImageDataGenerator(rescale=1./255.)
 
 test_generator=test_datagen.flow_from_dataframe(
                 dataframe=testdf,
-                directory="GrassDataSet\\biomass_data\\test\\images",
+                directory=path_to_GrassDataSet + "\\biomass_data\\test\\images",
                 x_col="image",
                 y_col=None,
                 batch_size=32,
@@ -97,6 +100,8 @@ test_generator=test_datagen.flow_from_dataframe(
 #   layers.Dense(128, activation='relu'),
 #   layers.Dense(17)
 # ])
+
+###################################Start changing stuff here###########################
 
 model = Sequential()
 model.add(Conv2D(32, (3, 3), padding='same',
@@ -125,24 +130,26 @@ model.compile(optimizer=Adam(learning_rate=0.001, weight_decay = 0.000001), loss
 
 model.summary()
 
+epochs = 1
 
+#####Dont Change this##############################################
 STEP_SIZE_TRAIN=int(train_generator.n/train_generator.batch_size)
 STEP_SIZE_VALID=int(valid_generator.n/valid_generator.batch_size)
 STEP_SIZE_TEST=int(test_generator.n/test_generator.batch_size)
 
-
 checkpoint_path = "training_1/cp.weights.h5"
 checkpoint_dir = os.path.dirname(checkpoint_path)
-
 # Create a callback that saves the model's weights
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
 
-
-epochs = 100
 history= model.fit(train_generator,steps_per_epoch=STEP_SIZE_TRAIN,validation_data=valid_generator,validation_steps=STEP_SIZE_VALID,epochs=epochs, callbacks=[cp_callback])
+###################################################################
 
+
+
+#Training visualization
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
 
@@ -167,10 +174,13 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
 
+
 model.evaluate(valid_generator,
 steps=STEP_SIZE_TEST)
 
-sunflower_url = "https://storage.googleapis.com/download.tensorflow.org/example_images/592px-Red_sunflower.jpg"
+
+#Predicting custom image
+sunflower_url = "input.jpg"
 sunflower_path = tf.keras.utils.get_file('Red_sunflower', origin=sunflower_url)
 
 img = tf.keras.utils.load_img(
@@ -191,6 +201,8 @@ print(
     .format(labels[np.argmax(score)], 100 * np.max(score))
 )
 
+
+#predicting a set amount of images
 test_generator.reset()
 pred=model.predict(test_generator,
 steps=STEP_SIZE_TEST,
