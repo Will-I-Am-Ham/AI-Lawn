@@ -6,8 +6,8 @@ from PIL import Image, ImageTk
 import random
 import pathlib
 
-import ai
-
+import loadweights
+import PredSoilColor
 
 import time
 
@@ -131,7 +131,6 @@ class AI_Lawns_GUI:
 
         if file_path:
 
-
             
             image = Image.open(file_path)
             image.thumbnail((300, 300))  # Resize image to fit in label
@@ -139,8 +138,12 @@ class AI_Lawns_GUI:
             self.image_label.config(image=photo)
             self.image_label.image = photo  # Keep reference to avoid garbage collection
             
-            os.replace(file_path, str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
-            print( str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
+
+            dryness = loadweights.predictdryness(file_path)
+            soilColor = PredSoilColor.predictColor(file_path)
+
+            # os.replace(file_path, str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
+            # print( str(pathlib.Path(__file__).parent.resolve()) + "\\input.jpg")
 
             ######################make the thing acutally work plz
             #output = ai.analyis()

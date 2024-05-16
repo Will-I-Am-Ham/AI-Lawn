@@ -27,3 +27,5 @@ def analyis():
   index = np.argmax(prediction)
   print("Prediction is: {class_names[index]}")
   return class_names[index]
+
+analyis()
