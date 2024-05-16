@@ -47,7 +47,7 @@ image_count = len(list(data_dir.glob('*/*.jpg')))
 
 print(image_count)
 
-train_datagen = ImageDataGenerator(rescale=1./255.,validation_split=0.4)
+train_datagen = ImageDataGenerator(rescale=1./255.,validation_split=0)
 
 train_generator=train_datagen.flow_from_dataframe(
                 dataframe=df,
@@ -130,7 +130,7 @@ model.compile(optimizer=Adam(learning_rate=0.001, weight_decay = 0.000001), loss
 
 model.summary()
 
-epochs = 400
+epochs = 200
 
 #####Dont Change this##############################################
 STEP_SIZE_TRAIN=int(train_generator.n/train_generator.batch_size)
@@ -144,17 +144,18 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
 
-history= model.fit(train_generator,steps_per_epoch=STEP_SIZE_TRAIN,validation_data=valid_generator,validation_steps=STEP_SIZE_VALID,epochs=epochs, callbacks=[cp_callback])
+#validation_data=valid_generator,validation_steps=STEP_SIZE_VALID,
+history= model.fit(train_generator,steps_per_epoch=STEP_SIZE_TRAIN,epochs=epochs, callbacks=[cp_callback])
 ###################################################################
 
 
 
 #Training visualization
 acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
+#val_acc = history.history['val_accuracy']
 
 loss = history.history['loss']
-val_loss = history.history['val_loss']
+#val_loss = history.history['val_loss']
 
 epochs_range = range(epochs)
 
@@ -163,20 +164,19 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
 plt.plot(epochs_range, acc, label='Training Accuracy')
-plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+#plt.plot(epochs_range, val_acc, label='Validation Accuracy')
 plt.legend(loc='lower right')
 plt.title('Training and Validation Accuracy')
 
 plt.subplot(1, 2, 2)
 plt.plot(epochs_range, loss, label='Training Loss')
-plt.plot(epochs_range, val_loss, label='Validation Loss')
+#plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
 
 
-model.evaluate(valid_generator,
-steps=STEP_SIZE_TEST)
+#model.evaluate(valid_generator,steps=STEP_SIZE_TEST)
 
 
 #Predicting custom image

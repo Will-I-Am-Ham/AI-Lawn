@@ -40,6 +40,8 @@ train_generator=train_datagen.flow_from_dataframe(
                 class_mode="categorical",
                 target_size=(32,32))
 
+
+#make sure that model is the same!!! as where the weights came from!!#
 model = Sequential()
 model.add(Conv2D(32, (3, 3), padding='same',
                  input_shape=(32,32,3)))
@@ -69,32 +71,30 @@ model.summary()
 
 
 
-##weight loading
-savedModel = model.load_weights('100epochs58acc.weights.h5')
+##weight loading (Change this if you want ti change the weights)##
+savedModel = model.load_weights('200.weights.h5')
+###################################################################
+
 print('Model Loaded!')
 
 
+def predictdryness(inputPath = "input.jpg"):
+  img = tf.keras.utils.load_img(
+      inputPath, target_size=(32, 32)
+  )
 
+  img_array = tf.keras.utils.img_to_array(img)
+  img_array = tf.expand_dims(img_array, 0) # Create a batch
 
+  predictions = model.predict(img_array)
+  score = tf.nn.softmax(predictions[0])
 
+  labels = (train_generator.class_indices)
+  labels = dict((v,k) for k,v in labels.items())
 
-sunflower_url = "input.jpg"
-sunflower_path = tf.keras.utils.get_file('Red_sunflower', origin=sunflower_url)
+  print(
+      "This image most likely belongs to {} with a {:.2f} percent confidence."
+      .format(labels[np.argmax(score)], 100 * np.max(score))
+  )
 
-img = tf.keras.utils.load_img(
-    sunflower_path, target_size=(32, 32)
-)
-
-img_array = tf.keras.utils.img_to_array(img)
-img_array = tf.expand_dims(img_array, 0) # Create a batch
-
-predictions = model.predict(img_array)
-score = tf.nn.softmax(predictions[0])
-
-labels = (train_generator.class_indices)
-labels = dict((v,k) for k,v in labels.items())
-
-print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(labels[np.argmax(score)], 100 * np.max(score))
-)
+predictdryness()
