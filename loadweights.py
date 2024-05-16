@@ -3,11 +3,9 @@ from keras.models import Sequential
 from keras_preprocessing.image import ImageDataGenerator
 from keras.layers import Dense, Activation, Flatten, Dropout, BatchNormalization
 from keras.layers import Conv2D, MaxPooling2D
-from keras import regularizers, optimizers
 import pandas as pd
 import numpy as np
 import pathlib
-import os
 
 import tensorflow as tf
 
@@ -79,6 +77,9 @@ print('Model Loaded!')
 
 
 def predictdryness(inputPath = "input.jpg"):
+
+  savedModel = model.load_weights('200.weights.h5')
+
   img = tf.keras.utils.load_img(
       inputPath, target_size=(32, 32)
   )
@@ -96,5 +97,7 @@ def predictdryness(inputPath = "input.jpg"):
       "This image most likely belongs to {} with a {:.2f} percent confidence."
       .format(labels[np.argmax(score)], 100 * np.max(score))
   )
+
+
 
 predictdryness()
