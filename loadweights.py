@@ -9,10 +9,6 @@ import pathlib
 
 import tensorflow as tf
 
-import statistics as st 
-from tensorflow.keras import layers
-
-
 
 ###############CHANGE THIS############
 path_to_GrassDataSet = "C:\\Users\\meow1\\Documents\\CodingProjects\\GrassDataSet"

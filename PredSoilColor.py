@@ -8,9 +8,6 @@ import pathlib
 
 import tensorflow as tf
 
-from tensorflow.keras import layers
-
-
 ###############CHANGE THIS############
 path_to_DataSet = "C:\\Users\\meow1\\Documents\\CodingProjects\\Soil types"
 ######################################
