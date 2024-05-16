@@ -97,7 +97,10 @@ class AI_Lawns_GUI:
         
         self.label.pack(pady=10)
         
-        self.select_image_button = tk.Button(master, text="Select Image",font=("Helvetica", 16), command=self.select_image)
+        self.select_image_button = tk.Button(master, text="Select Grass Image",font=("Helvetica", 16), command=self.select_image)
+        self.select_image_button.pack(pady=5)
+
+        self.select_image_button = tk.Button(master, text="Select Soil Image",font=("Helvetica", 16), command=self.Soilimage)
         self.select_image_button.pack(pady=5)
 
         self.select_prev_button = tk.Button(master, text="See previous images",font=("Helvetica", 16), command=self.prev_lawns)
@@ -140,6 +143,69 @@ class AI_Lawns_GUI:
             
 
             dryness = loadweights.predictdryness(file_path)
+            #soilColor = PredSoilColor.predictColor(file_path)
+
+            # os.replace(file_path, str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
+            # print( str(pathlib.Path(__file__).parent.resolve()) + "\\input.jpg")
+
+            ######################make the thing acutally work plz
+            #output = ai.analyis()
+
+            # Open another window
+            self.new_window = tk.Toplevel(self.master)
+            self.new_window.title("Analysis")
+            self.new_window.geometry("1000x700")
+
+            # c = 0
+            # while (c < 100000000):
+            #     c += 1
+            
+            image = Image.open("3717050461_6eaaf8a077.jpg")
+            image.thumbnail((200, 200))
+            photo = ImageTk.PhotoImage(image)
+            image_label = tk.Label(self.new_window, image=photo)
+            image_label.image = photo  # Keep reference to avoid garbage collection
+            image_label.pack(pady=10)
+
+            # Display "Hi" label
+            hi_label = tk.Label(self.new_window, text=suggestion, font=("Helvetica", 16))
+            hi_label.pack(pady=10)
+            
+            # Button to go back
+            back_button = tk.Button(self.new_window, text="Go Back", command=self.new_window.destroy)
+            back_button.pack(pady=5)
+
+    def Soilimage(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.png;*.jpg;*.jpeg")])
+        rand = random.randrange(0,6)
+        suggestion = ""
+        if rand == 0:
+            suggestion = silty
+        elif rand == 1:
+            suggestion = sandy
+        elif rand == 2:
+            suggestion = airate
+        elif rand == 3:
+            suggestion = water
+        elif rand == 4:
+            suggestion = loamly
+        elif rand == 5:
+            suggestion = rocky
+        
+        log = "asdasdadsads"
+        log = log + suggestion
+
+        if file_path:
+
+            
+            image = Image.open(file_path)
+            image.thumbnail((300, 300))  # Resize image to fit in label
+            photo = ImageTk.PhotoImage(image)
+            self.image_label.config(image=photo)
+            self.image_label.image = photo  # Keep reference to avoid garbage collection
+            
+
+            #dryness = loadweights.predictdryness(file_path)
             soilColor = PredSoilColor.predictColor(file_path)
 
             # os.replace(file_path, str(pathlib.Path(__file__).parent.resolve()) + "\\input.png")
@@ -171,6 +237,7 @@ class AI_Lawns_GUI:
             # Button to go back
             back_button = tk.Button(self.new_window, text="Go Back", command=self.new_window.destroy)
             back_button.pack(pady=5)
+
 
     def prev_lawns(self):
         self.new_window = tk.Toplevel(self.master)

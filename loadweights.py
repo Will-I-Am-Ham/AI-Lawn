@@ -96,4 +96,4 @@ def predictdryness(inputPath = "input.jpg"):
 
 
 
-predictdryness()
+#predictdryness()

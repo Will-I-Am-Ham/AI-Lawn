@@ -101,6 +101,4 @@ def predictColor(inputPath = "2.jpg"):
       .format(class_names[np.argmax(score)], 100 * np.max(score))
   )
 
-
-
-predictColor()
+#predictColor()
